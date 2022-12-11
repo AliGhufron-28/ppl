@@ -1,0 +1,113 @@
+<?php 
+require "function_admin.php";
+session_start();
+ 
+// cek apakah yang mengakses halaman ini sudah login
+if($_SESSION['status']==""){
+    header("Location: login.php?pesan=gagal");
+}
+$data = query("SELECT * FROM menu");
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>halaman admin</title>
+    <!-- Bootstrap Link -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" 
+    rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" 
+    crossorigin="anonymous">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Merriweather:wght@400;700;900&family=Open+Sans:wght@300;400&family=Quicksand:wght@300;400;500&display=swap" 
+    rel="stylesheet">
+    <!-- Box icons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <!-- Css landing -->
+    <link rel="stylesheet" href="css/landing.css">
+    <style>
+        .body {
+            /* background-color: #E9E9E9; */
+            font-family:'Helvetica';
+            font-weight: bold;
+        }
+        .poss {
+            margin-left: -60px;
+            margin-top: 25px;
+            color: black;
+        }
+        .poss2 {
+            margin-left: 165px;
+        }
+        .h2 {
+            font-family:'Helvetica';
+            font-weight: bold;
+        }
+    </style>
+    
+</head>
+<body class="body">
+<!-- Navbar -->
+<header>
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top py-3">
+            <div class="container">
+                <a class="navbar-brand" href="#"><span>MEMORY</span>JINGGA CAFE</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
+                    data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" 
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse d-flex justify-content-end align-items-center" id="navbarNavAltMarkup">
+                    <div class="navbar-nav">
+                        <a class="nav-link me-4" href="#">Welcome <?php echo $_SESSION['username']; ?></a>
+                        <div class="icons-home mt-2">
+                            <a href="logout.php"><i class='bx bx-log-out-circle'></i></a>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+          </nav>
+    </header>
+<div class="poss">
+        <div class="poss2" style="margin-top: 120px;">
+            <p>Halo <b><?php echo $_SESSION['username']; ?></b> Anda telah login sebagai <b><?php echo $_SESSION['status']; ?></b>.</p>
+            <a href="tambah_menu.php">tambah menu</a>
+            
+            
+            <div class="card-body m-5" style="margin-left: -50px;">
+                <table class="table table-bordered table-striped">
+                <tr>
+                    <th>No</th>
+                    <th>Nama</th>
+                    <th>Harga</th>
+                    <th>Jenis Menu</th>
+                    <th>Gambar</th>
+                    <th>Aksi</th>
+                </tr>
+        
+                <?php foreach($data as $hasil) : ?>
+                <tr>
+                    <td><?= $hasil["id_menu"]; ?></td>
+                    <td><?= $hasil["nm_menu"]; ?></td>
+                    <td><?= $hasil["harga"]; ?></td>
+                    <td><?= $hasil["jenis_menu"]; ?></td>
+                    <td><?php echo "<img src='img/$hasil[gambar]'/>";?></td>
+                    <td>
+                        <a class="btn btn-warning" href="edit_menu.php?id_menu=<?=$hasil["id_menu"];?>">
+                        <i class="bi bi-pencil-square"></i>Edit</a> 
+                        <a class="btn btn-danger" href="hapus_menu.php?id_menu=<?=$hasil["id_menu"];?>" onclick="return confirm('Apakah Anda Yakin?');">
+                        <i class="bi bi-trash"></i>Hapus</a>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+                </table>
+            
+        </div>
+        </div>
+</div>
+</body>
+</html>
